@@ -12,10 +12,11 @@ public class ContaCorrenteEspecial extends Conta{
    
     @Override
     public boolean saca(double saque){
-        if(saque > getSaldo() + getLimite()){
+        if((saque > getSaldo() + getLimite()) || CaixaT.sacaNotas(saque).equals("Falha no saque")){
             return false;
         } else {
           setSaldo(getSaldo()- saque);
+          System.out.println(CaixaT.sacaNotas(saque));
           this.adicionarExtrato("Saque de R$" + saque);
           return true;  
         }
@@ -33,8 +34,9 @@ public class ContaCorrenteEspecial extends Conta{
         return limite;
     }
     
-    public boolean transfere(Conta c,double dinheiro){ // colocar lançamento de exceção pra verificar se a conta existe.
-      if(c.verificar(c.getAgencia(), c.getConta())){ // -- MUDANÇA OUTRAS CLASS TBM
+    public boolean transfere(int ag, int conta,double dinheiro){ // colocar lançamento de exceção pra verificar se a conta existe.
+      if(verificar(ag, conta)){ // -- MUDANÇA OUTRAS CLASS TBM 
+         Conta c = Conta.pegarInstancia(ag,conta);
             if(this.getSaldo() + this.getLimite() >= dinheiro && dinheiro < 20000 && dinheiro > 0){
                 this.setSaldo(getSaldo() - dinheiro);
                 c.setSaldo(c.getSaldo() + dinheiro);
@@ -46,11 +48,5 @@ public class ContaCorrenteEspecial extends Conta{
         }
       return false;
     }
-
-    @Override
-    public String toString() {
-         return super.toString() + "Limite = " + limite;
-    }
-    
     
 }

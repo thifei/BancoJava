@@ -10,7 +10,7 @@ public class BDBanco {
     
     static ArrayList<Conta> BD = new ArrayList<Conta>(); // array list que é o "BD"
     static String ativo;
-    
+   
     public static void carregarBD(){
         ArrayList <Titular> t1 = new ArrayList<Titular>();
         ArrayList <Titular> t = new ArrayList<Titular>();
@@ -31,7 +31,7 @@ public class BDBanco {
         t1.add(n3);
         
         ContaCorrenteEspecial CCE = new ContaCorrenteEspecial(100,200,1000,t);         
-        ContaCorrenteSimples CCS = new ContaCorrenteSimples(6666,200,t1);
+        ContaCorrenteSimples CCS = new ContaCorrenteSimples(6666,20000,t1);
         Poupanca POUP = new Poupanca(150,t3,100,300);
         
         BD.add(CCE);
@@ -53,12 +53,13 @@ public class BDBanco {
                     for(int i = 0; i < p.titulares.size(); ++i){ // verifica a senha entre o array list de titulares
                         if(senha.equals(p.titulares.get(i).getSenha())){ // se a senha for igual a alguma senha dele
                             ativo = p.titulares.get(i).getNome();
+                            if(p.titulares.get(i).getBloqueio()==false){
                                 p.titulares.get(i).setChances(3);
                                 return true; // retorna verdadeiro
+                            }
                         }
                         else{
                             p.titulares.get(i).setChances();
-                            return false;
                         }
                     }  
                 }

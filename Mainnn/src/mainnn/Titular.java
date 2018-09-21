@@ -4,8 +4,8 @@ public class Titular {
     private String endereco, nome,senha;
     private boolean bloqueio= false;
     private int chances = 3;
-
-    public Titular(String e, String n, String senha) {
+    
+    protected Titular(String e, String n, String senha){
         setEndereco(e);
         setNome(n);
         setSenha(senha);
@@ -58,8 +58,5 @@ public class Titular {
     
     public void setChances(int i){
         chances= i;
-    }
-    public int getChances(){
-        return chances;
     }
 }

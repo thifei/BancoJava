@@ -90,9 +90,49 @@ public abstract class Conta implements IConta {
                 if(p.getConta() == conta){ // se a conta for igual
                     return true;
                 }
-    
             }
         } // for
          return false;
     }
+    
+    public static Conta pegarInstancia(int ag, int conta){
+         for(Conta p: BD){
+            if(p.getAgencia() == ag){ // se a agente for igual
+                if(p.getConta() == conta){ // se a conta for igual
+                    return p;
+                }
+            }
+        } // for
+         return null;
+    }
+    
+     @Override // se for usar esse tranfere é igual ao da conta simples, ai colocamos na CLASSE PAI e mandamos um overrride na conta especial pq tem limite la
+    public boolean transfere(int ag, int conta,double dinheiro){
+        if(verificar(ag,conta)){
+            Conta c = Conta.pegarInstancia(ag, conta);
+            if(this.getSaldo() >= dinheiro && dinheiro < 20000 && dinheiro > 0){
+                this.setSaldo(getSaldo() - dinheiro);
+                c.setSaldo(c.getSaldo() + dinheiro);
+
+                this.adicionarExtrato("Transferência de R$" + dinheiro +" para Conta: " + c.getAgencia() + " " + c.getConta() + " Titulares: " + c.titulares);
+                c.adicionarExtrato("Recebeu R$" + dinheiro + " da Conta: " + this.getAgencia() + " " + this.getConta() + " Titulares" + this.titulares);
+                return true;
+            }
+        } 
+        return false; 
+    }
+   
+    public boolean saca(double saque) {
+        if(saque > getSaldo()){
+            return false;
+        } else {
+          setSaldo(getSaldo()- saque);
+            if(CaixaT.sacaNotas(saque).equals("Falha no saque")){ // se der isso é pq nao tem notas
+                return false;
+             }
+          System.out.println(CaixaT.sacaNotas(saque));
+          this.adicionarExtrato("Saque de R$" + saque);
+          return true;  
+        }
+       }
 }
